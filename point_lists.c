@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 14:04:31 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/17 14:27:44 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/17 16:33:16 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,12 @@ t_point	*p_new_object(int x, int y, int z, int c)
 	return (new);
 }
 
-void	p_add_to_lst(t_point **last, t_point *new)
+void	p_add_to_end(t_point **list, t_point *new)
 {
-	(new)->next = (*last);
-	*last = new;
+	t_point	*travel;
+
+	travel = *list;
+	while (travel->next)
+		travel = travel->next;
+	travel->next = new;
 }
