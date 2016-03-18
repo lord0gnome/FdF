@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/17 16:39:19 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/18 16:16:10 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@ typedef struct	s_point
 	int				y;
 	int				z;
 	int				c;
-	struct s_point	*next;
 }				t_point;
 
-t_point	**test_points(int fd);
-t_point	*p_new_object(int x, int y, int z, int c);
-void	p_add_to_end(t_point **last, t_point *new);
+t_point	*test_points(char *points);
+t_point	*init_point(int x, int y, int z);
+int		convert_and_count(int fd, char **str);
 
 #endif
