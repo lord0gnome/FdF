@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/20 21:13:13 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/20 21:25:10 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_point	**make_table(char *points, int numlines, int num_in_line)
 	int		n;
 	t_point **start;
 	t_point	**startbck;
+	int		xcount;
 
 	start = (t_point **)malloc(sizeof(t_point *) * (num_in_line * numlines) + 1);
 	startbck = start;
@@ -28,17 +29,19 @@ t_point	**make_table(char *points, int numlines, int num_in_line)
 	while (numlines)
 	{
 		num_in_line = nilbck;
+		xcount = 0;
 		while (num_in_line)
 		{
 			n = ft_atoi(points);
 			points += ft_nbrlen(n);
 			(*start) = (t_point *)malloc(sizeof(t_point));
-			(*start)->x = ((nilbck - num_in_line) * 50 + 100);
-			(*start)->y = ((lbck - numlines) * 50 + 100);
+			(*start)->x = ((nilbck - num_in_line) * 25 + 100);
+			(*start)->y = ((lbck - numlines) * 25 + 100);
 			(*start)->z = n;
 			(*start)->c = 0x00ffffff;
 			start++;
 			num_in_line--;
+			xcount++;
 		}
 		numlines--;
 	}
