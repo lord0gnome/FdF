@@ -6,27 +6,58 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/20 18:25:44 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/20 21:13:13 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "GNL/get_next_line.h"
 
-int	test_and_store(int *numlines, int *num_in_line, char *points)
+t_point	**make_table(char *points, int numlines, int num_in_line)
+{
+	int		nilbck;
+	int		lbck;
+	int		n;
+	t_point **start;
+	t_point	**startbck;
+
+	start = (t_point **)malloc(sizeof(t_point *) * (num_in_line * numlines) + 1);
+	startbck = start;
+	lbck = numlines;
+	nilbck = num_in_line;
+	while (numlines)
+	{
+		num_in_line = nilbck;
+		while (num_in_line)
+		{
+			n = ft_atoi(points);
+			points += ft_nbrlen(n);
+			(*start) = (t_point *)malloc(sizeof(t_point));
+			(*start)->x = ((nilbck - num_in_line) * 50 + 100);
+			(*start)->y = ((lbck - numlines) * 50 + 100);
+			(*start)->z = n;
+			(*start)->c = 0x00ffffff;
+			start++;
+			num_in_line--;
+		}
+		numlines--;
+	}
+	*start = NULL;
+	ft_putstr("bloop");
+	return (startbck);
+}
+
+int	test_valid(int *numlines, int *num_in_line, char *points)
 {
 	int	i;
 	int	nilbck;
 
 	i = 0;
-	*num_in_line = 0;
 	*numlines = 0;
-	nilbck = *num_in_line;
+	nilbck = -1;
 	while(points[i])
 	{
-		if (nilbck != *num_in_line)
-			return (-1);
-		nilbck = *num_in_line;
+		*num_in_line = 0;
 		while (points[i] != '\n')
 		{
 			if (ft_isdigit(points[i]))
@@ -35,15 +66,16 @@ int	test_and_store(int *numlines, int *num_in_line, char *points)
 				while (ft_isdigit(points[i]))
 					i++;
 			}
-			else
-				return (-2);
-			if (points[i] == ' ')
+			while (points[i] == ' ')
 				i++;
-			else if (points[i] != '\n')
+			if (points[i] != '\n' && !ft_isdigit(points[i]))
 				return (-3);
 		}
-		*numlines += 1;
 		i++;
+		if (nilbck != -1 && nilbck != *num_in_line)
+			return (-2);
+		nilbck = *num_in_line;
+		*numlines += 1;
 	}
 		return (1);
 }
