@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/18 16:16:10 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/20 18:23:14 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <mlx.h>
 #include <stdlib.h>
 #include "ft_printf/ft_printf.h"
+#include <fcntl.h>
 
 typedef struct	s_point
 {
@@ -30,6 +31,7 @@ typedef struct	s_point
 
 t_point	*test_points(char *points);
 t_point	*init_point(int x, int y, int z);
-int		convert_and_count(int fd, char **str);
+int	get_line_and_len(int fd, char **into);
+int	test_and_store(int *numlines, int *num_in_line, char *points);
 
 #endif
