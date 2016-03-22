@@ -6,14 +6,14 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/22 15:30:11 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/22 16:32:12 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "GNL/get_next_line.h"
 
-t_point	**make_table(char *points, int numlines, int num_in_line)
+t_point	**make_table(char *s, int numlines, int num_in_line)
 {
 	int		n;
 	t_point **start;
@@ -26,23 +26,22 @@ t_point	**make_table(char *points, int numlines, int num_in_line)
 	startbck = start;
 	xcount = num_in_line;
 	ycount = numlines;
-	ft_putstr(points);
-	while (*points)
+	while (*s)
 	{
-		if (*points >= 48 && *points <= 57)
-			n = ft_atoi((const char *)points);
-		while (*points && (*points >= 48 && *points <= 57))
-			points++;
-		if (*points == ',')
+		if (*s >= 48 && *s <= 57)
+			n = ft_atoi((const char *)s);
+		while (*s && (*s >= 48 && *s <= 57))
+			s++;
+		if (*s == ',')
 		{
-			c = ft_atoi_hex(points);
-			while (*points && (ft_is_hex(*points) || ft_isdigit(*points)))
-				points++;
+			c = ft_atoi_hex(s);
+			while (*s && (ft_is_hex(*s) || ft_isdigit(*s) || *s == 'x' || *s == ','))
+				s++;
 		}
 		else
-			c = 0x00777777;
-		while (*points && (!(*points>= 48 && *points <= 57)))
-			points++;
+			c = 0xffffff;
+		while (*s && (!(*s>= 48 && *s <= 57)))
+			s++;
 		(*start) = (t_point *)malloc(sizeof(t_point));
 		if (num_in_line == 0)
 		{
@@ -75,7 +74,6 @@ int	test_valid(int *numlines, int *num_in_line, char *points)
 		{
 			if (ft_isdigit(points[i]))
 			{
-				ft_putchar(points[i]);
 				*num_in_line += 1;
 				while (ft_isdigit(points[i]))
 					i++;
@@ -97,7 +95,6 @@ int	test_valid(int *numlines, int *num_in_line, char *points)
 		nilbck = *num_in_line;
 		*numlines += 1;
 	}
-	ft_printf("lines :%d points per line : %d ::: total :%d\n", *numlines, *num_in_line, *numlines * *num_in_line);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/22 14:53:55 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/22 16:05:02 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ t_point			*test_points(char *points);
 t_point			*init_point(int x, int y, int z);
 int				get_line_and_len(int fd, char **into);
 int				test_valid(int *numlines, int *num_in_line, char *points);
-t_point			**make_table(char *points, int numlines, int num_in_line);
+t_point			**make_table(char *s, int numlines, int num_in_line);
 
 #endif

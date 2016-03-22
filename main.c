@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/22 15:14:58 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/22 16:31:19 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ static void	handle_ret(char *tab, t_point **begin, int sizeline, int bpp)
 	ft_printf("sizeline : %d, bpp : %d\n", sizeline, bpp);
 	while (*begin)
 	{
-		tab[((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))] = (char)(*begin)->c;
-		tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 1] = (char)(*begin)->c;
-		tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 2] = (char)(*begin)->c;
+		tab[((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))] = (*begin)->c << 16 >> 16;
+		tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 1] = (*begin)->c << 8 >> 16;
+		tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 2] = (*begin)->c >> 16;
 
-		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8))] = (char)(*begin)->c;
-		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 1] = (char)(*begin)->c;
-		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 2] = (char)(*begin)->c;
+		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8))] = (*begin)->c << 16 >> 16;
+		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 1] = (*begin)->c << 8 >> 16;
+		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 2] = (*begin)->c >> 16;
 
-		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8))] = (char)(*begin)->c;
-		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8)) + 1] = (char)(*begin)->c;
-		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8)) + 2] = (char)(*begin)->c;
+		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8))] = (*begin)->c << 16 >> 16;
+		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8)) + 1] = (*begin)->c << 8 >> 16;
+		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8)) + 2] = (*begin)->c >> 16;
 
-		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8))] = (char)(*begin)->c;
-		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 1] = (char)(*begin)->c;
-		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 2] = (char)(*begin)->c;
+		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8))] = (*begin)->c << 16 >> 16;
+		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 1] = (*begin)->c << 8 >> 16;
+		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 2] = (*begin)->c >> 16;
 		begin++;
 	}
 }
