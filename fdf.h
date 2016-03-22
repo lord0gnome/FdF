@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/20 20:41:24 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/22 14:53:55 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ typedef struct	s_point
 	int			c;
 }				t_point;
 
+int				ft_is_hex(char c);
+int				ft_atoi_hex(const char *str);
 t_point			*test_points(char *points);
 t_point			*init_point(int x, int y, int z);
 int				get_line_and_len(int fd, char **into);

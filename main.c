@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/20 21:28:14 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/22 15:14:58 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,27 @@
 
 static void	handle_ret(char *tab, t_point **begin, int sizeline, int bpp)
 {
+	ft_printf("sizeline : %d, bpp : %d\n", sizeline, bpp);
 	while (*begin)
 	{
-		tab[((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))] = 0xff;
-		tab[((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8)) + 1] = 0xff;
-		tab[((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8)) + 2] = 0xff;
-		tab += 4;
+		tab[((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))] = (char)(*begin)->c;
+		tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 1] = (char)(*begin)->c;
+		tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 2] = (char)(*begin)->c;
+
+		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8))] = (char)(*begin)->c;
+		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 1] = (char)(*begin)->c;
+		tab[(((*begin)->y + 1) * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 2] = (char)(*begin)->c;
+
+		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8))] = (char)(*begin)->c;
+		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8)) + 1] = (char)(*begin)->c;
+		tab[(((*begin)->y + 1) * sizeline) + ((*begin)->x * (bpp / 8)) + 2] = (char)(*begin)->c;
+
+		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8))] = (char)(*begin)->c;
+		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 1] = (char)(*begin)->c;
+		tab[((*begin)->y * sizeline) + (((*begin)->x + 1) * (bpp / 8)) + 2] = (char)(*begin)->c;
 		begin++;
 	}
 }
-
-
 
 int	main(int argc, char **argv)
 {
@@ -43,19 +53,20 @@ int	main(int argc, char **argv)
 	int		numlines;
 	int		retoftest;
 	t_point	**new;
+	int		index;
 
-
+	index = 0;
 	if (argc > 1)
 	{
 		if ((fd = open(argv[1], O_RDONLY)) == -1)
 			return (-1);
-		ft_putnbr(get_line_and_len(fd, &test));
+		get_line_and_len(fd, &test);
 		retoftest = test_valid(&numlines, &numinline, test);
+		ft_putnbr(retoftest);
 		new = make_table(test, numlines, numinline);
-		ft_printf("X,Y,Z = (%d|%d|%d)\n", (*new)->x, (*new)->y, (*new)->z);
 		mlxinit = mlx_init();
-		mlximg1 = mlx_new_image(mlxinit, 1024, 768);
-		window1 = mlx_new_window(mlxinit ,1024, 768, "fdf");
+		mlximg1 = mlx_new_image(mlxinit, 1920, 1080);
+		window1 = mlx_new_window(mlxinit ,1920, 1080, "fdf");
 		mlxret = mlx_get_data_addr(mlximg1, &bpp, &sizeline, &endian);
 		handle_ret(mlxret, new, sizeline, bpp);
 		mlx_put_image_to_window(mlxinit, window1, mlximg1, 0, 0);

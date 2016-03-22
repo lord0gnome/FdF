@@ -6,11 +6,11 @@
 #    By: guiricha <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/26 16:55:06 by guiricha          #+#    #+#              #
-#    Updated: 2016/03/20 18:26:48 by guiricha         ###   ########.fr        #
+#    Updated: 2016/03/22 14:52:57 by guiricha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_NAME = main.c parse.c
+SRC_NAME = main.c parse.c ft_atoi_hex.c ft_is_hex.c
 NAME = fdf
 CC = gcc
 CFLAGS = -Werror -Wextra -Wall

@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/20 21:25:10 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/22 15:30:11 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,45 @@
 
 t_point	**make_table(char *points, int numlines, int num_in_line)
 {
-	int		nilbck;
-	int		lbck;
 	int		n;
 	t_point **start;
 	t_point	**startbck;
 	int		xcount;
+	int		ycount;
+	int		c;
 
 	start = (t_point **)malloc(sizeof(t_point *) * (num_in_line * numlines) + 1);
 	startbck = start;
-	lbck = numlines;
-	nilbck = num_in_line;
-	while (numlines)
+	xcount = num_in_line;
+	ycount = numlines;
+	ft_putstr(points);
+	while (*points)
 	{
-		num_in_line = nilbck;
-		xcount = 0;
-		while (num_in_line)
+		if (*points >= 48 && *points <= 57)
+			n = ft_atoi((const char *)points);
+		while (*points && (*points >= 48 && *points <= 57))
+			points++;
+		if (*points == ',')
 		{
-			n = ft_atoi(points);
-			points += ft_nbrlen(n);
-			(*start) = (t_point *)malloc(sizeof(t_point));
-			(*start)->x = ((nilbck - num_in_line) * 25 + 100);
-			(*start)->y = ((lbck - numlines) * 25 + 100);
-			(*start)->z = n;
-			(*start)->c = 0x00ffffff;
-			start++;
-			num_in_line--;
-			xcount++;
+			c = ft_atoi_hex(points);
+			while (*points && (ft_is_hex(*points) || ft_isdigit(*points)))
+				points++;
 		}
-		numlines--;
+		else
+			c = 0x00777777;
+		while (*points && (!(*points>= 48 && *points <= 57)))
+			points++;
+		(*start) = (t_point *)malloc(sizeof(t_point));
+		if (num_in_line == 0)
+		{
+			num_in_line = xcount;
+			numlines--;
+		}
+		(*start)->x = ((xcount - num_in_line--) * 25 + 50);
+		(*start)->y = ((ycount - numlines) * 25 + 50);
+		(*start)->z = n;
+		(*start)->c = c;
+		start++;
 	}
 	*start = NULL;
 	ft_putstr("bloop");
@@ -65,8 +75,15 @@ int	test_valid(int *numlines, int *num_in_line, char *points)
 		{
 			if (ft_isdigit(points[i]))
 			{
+				ft_putchar(points[i]);
 				*num_in_line += 1;
 				while (ft_isdigit(points[i]))
+					i++;
+				if (points[i] == ',')
+					if (points[i + 1] && points[i + 1] == '0')
+						if (points[i + 2] && points[i + 2] == 'x')
+							i += 3;
+				while (ft_is_hex(points[i]) || ft_isdigit(points[i]))
 					i++;
 			}
 			while (points[i] == ' ')
@@ -80,7 +97,8 @@ int	test_valid(int *numlines, int *num_in_line, char *points)
 		nilbck = *num_in_line;
 		*numlines += 1;
 	}
-		return (1);
+	ft_printf("lines :%d points per line : %d ::: total :%d\n", *numlines, *num_in_line, *numlines * *num_in_line);
+	return (1);
 }
 
 int	get_line_and_len(int fd, char **into)
