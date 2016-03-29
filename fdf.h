@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/22 16:05:02 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/29 14:33:20 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,20 @@
 # include <stdlib.h>
 # include "ft_printf/ft_printf.h"
 # include <fcntl.h>
+
+typedef struct	s_line
+{
+	int	sx;
+	int	sy;
+	int	dx;
+	int	dy;
+	int x1;
+	int x2;
+	int y1;
+	int y2;
+	int	err;
+	int	err2;
+}				t_line;
 
 typedef struct	s_point
 {

@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/22 16:32:12 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/03/29 14:37:14 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ t_point	**make_table(char *s, int numlines, int num_in_line)
 	{
 		if (*s >= 48 && *s <= 57)
 			n = ft_atoi((const char *)s);
+		if (n == 0)
+			n = -1;
 		while (*s && (*s >= 48 && *s <= 57))
 			s++;
 		if (*s == ',')
@@ -39,7 +41,7 @@ t_point	**make_table(char *s, int numlines, int num_in_line)
 				s++;
 		}
 		else
-			c = 0xffffff;
+			c = -3;
 		while (*s && (!(*s>= 48 && *s <= 57)))
 			s++;
 		(*start) = (t_point *)malloc(sizeof(t_point));
@@ -48,10 +50,18 @@ t_point	**make_table(char *s, int numlines, int num_in_line)
 			num_in_line = xcount;
 			numlines--;
 		}
-		(*start)->x = ((xcount - num_in_line--) * 25 + 50);
-		(*start)->y = ((ycount - numlines) * 25 + 50);
+		(*start)->x = ((xcount - num_in_line--) * 3 + 50);
+		(*start)->y = ((ycount - numlines) * 3 + 50);
 		(*start)->z = n;
 		(*start)->c = c;
+		if ((*start)->c == -3 && n != -1)
+		{
+			(*start)->c = ((n * 14) & 0xff) << 16;
+			(*start)->c |= ((n * 8) & 0xff) << 8;
+			(*start)->c |= ((n * 8) & 0xff);
+		}
+		if ((*start)->c == -3 || n == -1)
+			(*start)->c = 0xffffff;
 		start++;
 	}
 	*start = NULL;
