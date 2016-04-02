@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/01 14:02:38 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/02 18:51:43 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@
 # include <fcntl.h>
 # include <math.h>
 # include "minilibx_macos/mlx.h"
+
+typedef struct	s_grade
+{
+	int			colortodraw;
+	unsigned char		r;	
+	unsigned char		g;
+	unsigned char		b;
+	unsigned char	red;
+	unsigned char	grn;
+	unsigned char	blu;
+	int			count;
+
+}				t_grade;
 
 typedef struct	s_init
 {

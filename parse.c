@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/01 15:53:56 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/02 18:51:41 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ t_point	**make_table(char *s, t_init *d)
 		(*start)->y = ((((d->ybck - d->y))) * d->spread);
 		if ((*start)->c == -3 && (*start)->z != 0)
 		{
-			(*start)->c = ((abs((*start)->z) * 15) & 0xff) << 16;
-			(*start)->c |= ((abs((*start)->z) * 14) & 0xff) << 8;
-			(*start)->c |= ((abs((*start)->z) * 13) & 0xff);
+			(*start)->c = ((abs(((*start)->z) * 17) + 17) & 0xff) << 16;
+			(*start)->c |= ((abs(((*start)->z) * 16) + 16) & 0xff) << 8;
+			(*start)->c |= ((abs(((*start)->z) * 15) + 15) & 0xff);
 		}
 		else if ((*start)->c == -3)
 			(*start)->c = 0xffffff;

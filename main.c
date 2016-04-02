@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/01 14:45:57 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/02 18:11:58 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int argc, char **argv)
 
 	if (!(n = (t_init *)malloc(sizeof(t_init))))
 	index = 0;
-	n->spread = 120;
+	n->spread = 900;
 	if (argc == 2)
 	{
 		if ((fd = open(argv[1], O_RDONLY)) < 0)
