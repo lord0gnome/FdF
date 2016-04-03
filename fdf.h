@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/02 18:51:43 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/03 18:39:41 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ typedef struct	s_grade
 	unsigned char		r;	
 	unsigned char		g;
 	unsigned char		b;
-	unsigned char	red;
-	unsigned char	grn;
-	unsigned char	blu;
+	int	red;
+	int	grn;
+	int	blu;
 	int			count;
 
 }				t_grade;
@@ -73,7 +73,8 @@ typedef struct	s_point
 	int			y;
 	int			z;
 	int			c;
-	int			ld;
+	int			ldx;
+	int			ldy;
 }				t_point;
 
 void			draw_pixels(char *tab, t_point **begin, t_init *n);

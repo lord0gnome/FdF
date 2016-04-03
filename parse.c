@@ -6,20 +6,22 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/02 18:51:41 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/03 21:02:40 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "GNL/get_next_line.h"
 
-static void	init_start_object(t_point *object)
+static void	init_start_object(t_point **object)
 {
-	object->x = -1;
-	object->y = -1;
-	object->z = -1;
-	object->c = -1;
-	object->ld = -1;
+	((*object) = (t_point *)malloc(sizeof(t_point)));
+	(*object)->x = 0;
+	(*object)->y = 0;
+	(*object)->z = 0;
+	(*object)->c = 0;
+	(*object)->ldx = 0;
+	(*object)->ldy = 0;
 }
 
 t_point	**make_table(char *s, t_init *d)
@@ -29,23 +31,22 @@ t_point	**make_table(char *s, t_init *d)
 
 	d->xbck = d->x;
 	d->ybck = d->y;
-	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((d->x) * (d->y + 2)) + 1)))
+	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((((d->x) * (d->y) + 1))))))
 		return (NULL);
 	//	ft_printf("lines;%d,  X;%d sizeofstart:%zu\n", numlines, num_in_line, sizeof(start));
-		while (((d->spread * d->y) > (1080) / 2) || ((d->spread * d->x) > ((1920 / 2))))
-			d->spread--;
-	while (d->x--)
+	//	while (((d->spread * d->y) > (1080) / 2) || ((d->spread * d->x) > ((1920 / 2))))
+	//		d->spread--;
+/*	while (d->x--)
 	{
 		*start = NULL;
 		start++;
-	}
+	}*/
 	startbck = start;
-	d->x = d->xbck;
 	while (*s)
 	{
-		if (!((*start) = (t_point *)malloc(sizeof(t_point))))
+		init_start_object(start);
+		if (!(*start))
 			return (NULL);
-		init_start_object(*start);
 		if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
 			(*start)->z = ft_atoi((const char *)s);
 		while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
@@ -69,22 +70,20 @@ t_point	**make_table(char *s, t_init *d)
 		(*start)->y = ((((d->ybck - d->y))) * d->spread);
 		if ((*start)->c == -3 && (*start)->z != 0)
 		{
-			(*start)->c = ((abs(((*start)->z) * 17) + 17) & 0xff) << 16;
-			(*start)->c |= ((abs(((*start)->z) * 16) + 16) & 0xff) << 8;
-			(*start)->c |= ((abs(((*start)->z) * 15) + 15) & 0xff);
+			(*start)->c = ((abs(((*start)->z) * 5) + 25) & 0xff) << 16;
+			(*start)->c |= ((abs(((*start)->z) * 5) + 25) & 0xff) << 8;
+			(*start)->c |= ((abs(((*start)->z) * 5) + 25) & 0xff);
 		}
 		else if ((*start)->c == -3)
 			(*start)->c = 0xffffff;
 		//ft_printf("pixel n%d x = [%d], y = [%d], z = [%d], c = [%d], linenumber = [%d]\n", tmpcount, (*start)->x, (*start)->y, (*start)->z, (*start)->c, numlines);
 		start++;
 	}
-	d->x = d->xbck;
-	d->x++;
-	while (d->x--)
+	/*while (d->x--)
 	{
 		*start = NULL;
 		start++;
-	}
+	}*/
 	*start = NULL;
 	ft_putstr("bloop");
 	return (startbck);

@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/02 18:11:58 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/03 21:03:35 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_point	**iso_view(t_point **start)
 		(*start)->x = xb - yb;
 		(*start)->y = (yb + xb) / 2;
 		if ((*start)->z != 0)
-			(*start)->y -= (*start)->z * 2;
+			(*start)->y -= (*start)->z;
 		start++;
 	}
 	return (bck);
@@ -97,7 +97,7 @@ int	main(int argc, char **argv)
 
 	if (!(n = (t_init *)malloc(sizeof(t_init))))
 	index = 0;
-	n->spread = 900;
+	n->spread = 5;
 	if (argc == 2)
 	{
 		if ((fd = open(argv[1], O_RDONLY)) < 0)
