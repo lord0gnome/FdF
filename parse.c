@@ -6,12 +6,13 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 15:23:23 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 16:37:27 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "GNL/get_next_line.h"
+#include <stdio.h>
 
 static void	init_start_object(t_point **object)
 {
@@ -28,9 +29,11 @@ t_point	**make_table(char *s, t_init *d)
 {
 	t_point **start;
 	t_point	**startbck;
+	time_t	t;
 
 	d->xbck = d->x;
 	d->ybck = d->y;
+	srand((unsigned) time(&t));
 	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((((d->x) * (d->y) + 1))))))
 		return (NULL);
 	while (((d->spread * d->y) > (d->wHeight / 2)) || ((d->spread * d->x) > ((d->wWidth / 2))))
@@ -64,9 +67,9 @@ t_point	**make_table(char *s, t_init *d)
 			(*start)->y = ((((d->ybck - d->y))) * d->spread);
 			if ((*start)->c == -3 && (*start)->z != 0)
 			{
-				(*start)->c = ((abs(((*start)->z) * 5) + (d->colorz * 35)) & 0xff) << 16;
-				(*start)->c |= ((abs(((*start)->z) * 5) + (d->colorz * 35)) & 0xff) << 8;
-				(*start)->c |= ((abs(((*start)->z) * 5) + (d->colorz * 35)) & 0xff);
+				(*start)->c = ((abs(((*start)->z)) + (rand() % 240)) & 0xff) << 16;
+				(*start)->c |= ((abs(((*start)->z)) + (rand() % 240)) & 0xff) << 8;
+				(*start)->c |= ((abs(((*start)->z)) + (rand() % 240)) & 0xff);
 			}
 			else if ((*start)->c == -3)
 				(*start)->c = d->colorz == 1 ? 0xffffff : 0;

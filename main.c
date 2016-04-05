@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 15:34:25 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 16:40:11 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_point	**offset(t_point **start)
 	int		ylow;
 
 	bck = start;
-	if (*start && (*start)->x == 0 && (*start)->y == 0)
+	if (*start)
 	{
 		xlow = (*start)->x;
 		ylow = (*start)->y;
@@ -144,8 +144,8 @@ int	main(int argc, char **argv)
 		retoftest = test_valid(test, n);
 		ft_putnbr(retoftest);
 		ft_putnbr(++index);
-		modify_init_with_args(argc, argv, n);
 		ft_putnbr(++index);
+		modify_init_with_args(argc, argv, n);
 		ft_putnbr(n->colorz);
 		numlines = n->y;
 		numinline = n->x;

@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/01 10:54:33 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 15:07:00 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 16:21:31 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ static t_grade	draw_line_color(t_point *p1, t_point *p2)
 
 void	init_new(t_line *new, t_point **begin, t_point *end)
 {
-		new->x1 = (*(begin))->x;
-		new->x2 = ((end))->x;
-		new->y1 = (*(begin))->y;
-		new->y2 = (end)->y;
-		new->dx = abs(new->x2 - new->x1);
-		new->sx = new->x1 < new->x2 ? 1 : -1;
-		new->dy = abs(new->y2 - new->y1);
-		new->sy = new->y1 < new->y2 ? 1 : -1;
-		new->err = (new->dx > new->dy ? new->dx : -new->dy) / 2;
+	new->x1 = (*(begin))->x;
+	new->x2 = ((end))->x;
+	new->y1 = (*(begin))->y;
+	new->y2 = (end)->y;
+	new->dx = abs(new->x2 - new->x1);
+	new->sx = new->x1 < new->x2 ? 1 : -1;
+	new->dy = abs(new->y2 - new->y1);
+	new->sy = new->y1 < new->y2 ? 1 : -1;
+	new->err = (new->dx > new->dy ? new->dx : -new->dy) / 2;
 }
 
 int		try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
@@ -51,15 +51,15 @@ int		try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
 	if ((*begin) && end)
 	{
 		init_new(&new, begin, end);
-/*		new.x1 = (*(begin))->x;
-		new.x2 = ((end))->x;
-		new.y1 = (*(begin))->y;
-		new.y2 = (end)->y;
-		new.dx = abs(new.x2 - new.x1);
-		new.sx = new.x1 < new.x2 ? 1 : -1;
-		new.dy = abs(new.y2 - new.y1);
-		new.sy = new.y1 < new.y2 ? 1 : -1;
-		new.err = (new.dx > new.dy ? new.dx : -new.dy) / 2;*/
+		/*		new.x1 = (*(begin))->x;
+				new.x2 = ((end))->x;
+				new.y1 = (*(begin))->y;
+				new.y2 = (end)->y;
+				new.dx = abs(new.x2 - new.x1);
+				new.sx = new.x1 < new.x2 ? 1 : -1;
+				new.dy = abs(new.y2 - new.y1);
+				new.sy = new.y1 < new.y2 ? 1 : -1;
+				new.err = (new.dx > new.dy ? new.dx : -new.dy) / 2;*/
 		d->pxdst = new.dx > new.dy ? new.dx : new.dy;
 		m = draw_line_color((*begin), (end));
 		m.count = 0;
@@ -74,6 +74,15 @@ int		try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
 			tab[(new.y1 * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
 			tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 1] = mt.g;
 			tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
+			tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
+			tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 1] = mt.g;
+			tab[(((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
+			tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
+			tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
+			tab[(((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
+			tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
+			tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
+			tab[(((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
 			if ((new.y1 == new.y2 && new.x1 == new.x2) || !new.x2 || !new.y2)
 				break;
 			new.err2 = new.err;
@@ -118,13 +127,5 @@ void	draw_pixels(char *tab, t_point **begin, t_init *d)
 		d->y++;
 	}
 }
-/*
-   tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
-   tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 1] = mt.g;
-   tab[(((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
-   tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
-   tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
-   tab[(((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
-   tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
-   tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
-   tab[(((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;*/
+
+
