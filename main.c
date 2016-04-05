@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/03 21:03:35 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 15:34:25 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,35 +22,25 @@ t_point	**offset(t_point **start)
 	int		ylow;
 
 	bck = start;
-	if (*start)
+	if (*start && (*start)->x == 0 && (*start)->y == 0)
 	{
-	xlow = (*start)->x;
-	ylow = (*start)->y;
-	while (*start)
-	{
-		if ((*start)->x < xlow)
-			xlow = (*start)->x;	
-		if ((*start)->y < ylow)
-			ylow = (*start)->y;	
-		start++;
-	}
-	start = bck;
-	ft_printf("xlow%d ylow%d", xlow, ylow);
-	while (*start)
-	{
-		(*start)->y += abs(ylow) + 25;
-		(*start)->x += abs(xlow) + 25;
-		start++;
-		/*	if ((*start)->y < 0)
-			(*start)->y = 0;
-			if ((*start)->x < 0)
-			(*start)->x = 0;
-			if ((*start)->y > 1080)
-			(*start)->y = 1050;
-			if ((*start)->x > 1920)
-			(*start)->x = 1870;*/
-
-	}
+		xlow = (*start)->x;
+		ylow = (*start)->y;
+		while (*start)
+		{
+			if ((*start)->x < xlow)
+				xlow = (*start)->x;	
+			if ((*start)->y < ylow)
+				ylow = (*start)->y;	
+			start++;
+		}
+		start = bck;
+		while (*start)
+		{
+			(*start)->y += abs(ylow) + 25;
+			(*start)->x += abs(xlow) + 25;
+			start++;
+		}
 	}
 	return (bck);
 }
@@ -76,6 +66,52 @@ t_point	**iso_view(t_point **start)
 }
 
 
+void	modify_init_with_args(int argc, char **argv, t_init *n)
+{
+	int	i;
+
+	i = 2;
+	while (argc > 2)
+	{
+		if (!strncmp(argv[i], "wHeight:\0", 8))
+			n->wHeight = ft_atoi(argv[i] + 8);
+		else if (!strncmp(argv[i], "wWidth:\0", 7))
+			n->wWidth = ft_atoi(argv[i] + 7);
+		else if (!strncmp(argv[i], "spread:\0", 7))
+			n->spread = ft_atoi(argv[i] + 7);
+		else if (!strncmp(argv[i], "zrate:\0", 6))
+			n->zrate = ft_atoi(argv[i] + 6);
+		else if (!strncmp(argv[i], "colorzero:\0", 10))
+			n->colorz = ft_atoi(argv[i] + 10);
+		argc--;
+		i++;
+	}
+	n->wWidth = n->wWidth >= 25 && n->wWidth < 1920 ? n->wWidth : 500;
+	n->wHeight = n->wHeight >= 25 && n->wHeight < 1080 ? n->wHeight : 500;
+	n->zrate = n->zrate > 0 && n->zrate <= 9 ? n->zrate : 1;
+	n->spread = n->spread >= 1 && n->spread < 1920 ? n->spread : 50;
+	n->colorz = n->colorz == 0 || n->colorz == 1 ? n->colorz : 1;
+}
+
+void	init_init(t_init **n)
+{
+	(*n)->i      = 0;
+	(*n)->x      = 0;
+	(*n)->y      = 0;
+	(*n)->xbck   = 0;
+	(*n)->ybck   = 0;
+	(*n)->pitch  = 0;
+	(*n)->spread = 0;
+	(*n)->wWidth = 1024;
+	(*n)->wHeight= 768;
+	(*n)->zmax   = 0;
+	(*n)->zmin   = 0;
+	(*n)->colorz = -1;
+	(*n)->bpp    = 0;
+	(*n)->sl     = 0;
+	(*n)->pxdst  = 0;
+}
+
 int	main(int argc, char **argv)
 {
 	void	*mlxinit;
@@ -96,114 +132,44 @@ int	main(int argc, char **argv)
 
 
 	if (!(n = (t_init *)malloc(sizeof(t_init))))
+		return (-1);
+		init_init(&n);
 	index = 0;
-	n->spread = 5;
-	if (argc == 2)
+	if (argc >= 2)
 	{
 		if ((fd = open(argv[1], O_RDONLY)) < 0)
 			return (-1);
 		get_line_and_len(fd, &test);
+		ft_putnbr(++index);
 		retoftest = test_valid(test, n);
+		ft_putnbr(retoftest);
+		ft_putnbr(++index);
+		modify_init_with_args(argc, argv, n);
+		ft_putnbr(++index);
+		ft_putnbr(n->colorz);
 		numlines = n->y;
 		numinline = n->x;
-		ft_putnbr(retoftest);
 		if (!(new = make_table(test, n)))
 			return (-1);
+		ft_putnbr(++index);
 		mlxinit = mlx_init();
-		mlximg1 = mlx_new_image(mlxinit, 1920, 1080);
-		window1 = mlx_new_window(mlxinit ,1920, 1080, "fdf");
+		ft_putnbr(++index);
+		mlximg1 = mlx_new_image(mlxinit, n->wWidth, n->wHeight);
+		ft_putnbr(++index);
+		window1 = mlx_new_window(mlxinit ,n->wWidth, n->wHeight, "fdf");
+		//ft_putnbr(++index);
 		new = iso_view(new);
+		//ft_putnbr(++index);
 		new = offset(new);
+		ft_putnbr(++index);
 		mlxret = mlx_get_data_addr(mlximg1, &bpp, &sizeline, &endian);
+		ft_putnbr(++index);
 		n->bpp = bpp;
 		n->sl = sizeline;
 		draw_pixels(mlxret, new, n);
+		ft_putnbr(++index);
 		mlx_put_image_to_window(mlxinit, window1, mlximg1, 0, 0);
+		ft_putnbr(++index);
 		mlx_loop(mlxinit);
 	}
 }
-
-/*void	handle_ret(char *tab, t_point **begin, int sizeline, int bpp, int numinline)
-  {
-  t_line new;
-  t_line n;
-  int	nilbck;
-  ft_printf("sizeline : %d, bpp : %d\n", sizeline, bpp);
-  nilbck = numinline;
-  while (*(begin + 1))
-  {
-  tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8)))] = (*begin)->c << 16 >> 16;
-  tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 1] = (*begin)->c << 8 >> 16;
-  tab[(((*begin)->y * sizeline) + ((*begin)->x * (bpp / 8))) + 2] = (*begin)->c >> 16;
-  if (*(begin + 1))
-  {
-  if (numinline != 1)
-  {
-  new.x1 = (*begin)->x;
-  new.x2 = (*(begin + 1))->x;
-  new.y1 = (*begin)->y;
-  new.y2 = (*(begin + 1))->y;
-  new.dx = abs(new.x2 - new.x1);
-  new.sx = new.x1 < new.x2 ? 1 : -1;
-  new.dy = abs(new.y2 - new.y1);
-  new.sy = new.y1 < new.y2 ? 1 : -1;
-  new.err = (new.dx > new.dy ? new.dx : -new.dy) / 2;
-  while (42)
-  {
-  tab[(new.y1 * sizeline) + (new.x1 * (bpp / 8))] = (*begin)->c << 16 >> 16;
-  tab[((new.y1 * sizeline) + (new.x1 * (bpp / 8))) + 1] = (*begin)->c << 8 >> 16;
-  tab[((new.y1 * sizeline) + (new.x1 * (bpp / 8))) + 2] = (*begin)->c >> 16;
-  if ((new.y1 == new.y2 && new.x1 == new.x2) || !new.x2 || !new.y2)
-  break;
-  new.err2 = new.err;
-  if (new.err2 > -new.dx)
-  {
-  new.err -= new.dy;
-  new.x1 += new.sx;
-  }
-  if (new.err2 < new.dy)
-  {
-  new.err += new.dx;
-  new.y1 += new.sy;
-  }
-  }
-  }
-  if (*(begin + nilbck))
-  {
-  n.x1 = (*begin)->x;
-  n.x2 = (*(begin + nilbck))->x;
-  n.y1 = (*begin)->y;
-  n.y2 = (*(begin + nilbck))->y;
-  n.dx = abs(n.x2 - n.x1);
-  n.sx = n.x1 < n.x2 ? 1 : -1;
-  n.dy = abs(n.y2 - n.y1);
-  n.sy = n.y1 < n.y2 ? 1 : -1;
-  n.err = (n.dx > n.dy ? n.dx : -n.dy) / 2;
-  while (42)
-  {
-  tab[(n.y1 * sizeline) + (n.x1 * (bpp / 8))] = (*begin)->c << 16 >> 16;
-  tab[((n.y1 * sizeline) + (n.x1 * (bpp / 8))) + 1] = (*begin)->c << 8 >> 16;
-  tab[((n.y1 * sizeline) + (n.x1 * (bpp / 8))) + 2] = (*begin)->c >> 16;
-  if ((n.y1 == n.y2 && n.x1 == n.x2) || !n.x2 || !n.y2)
-  break;
-  n.err2 = n.err;
-  if (n.err2 > -n.dx)
-  {
-  n.err -= n.dy;
-  n.x1 += n.sx;
-  }
-  if (n.err2 < n.dy)
-  {
-n.err += n.dx;
-n.y1 += n.sy;
-}
-}
-}
-if (numinline == 0)
-	numinline = nilbck;
-	numinline--;
-	}
-begin++;
-}
-}
-*/

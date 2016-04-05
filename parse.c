@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/03 21:02:40 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 15:23:23 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,59 +33,45 @@ t_point	**make_table(char *s, t_init *d)
 	d->ybck = d->y;
 	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((((d->x) * (d->y) + 1))))))
 		return (NULL);
-	//	ft_printf("lines;%d,  X;%d sizeofstart:%zu\n", numlines, num_in_line, sizeof(start));
-	//	while (((d->spread * d->y) > (1080) / 2) || ((d->spread * d->x) > ((1920 / 2))))
-	//		d->spread--;
-/*	while (d->x--)
-	{
-		*start = NULL;
-		start++;
-	}*/
+	while (((d->spread * d->y) > (d->wHeight / 2)) || ((d->spread * d->x) > ((d->wWidth / 2))))
+		d->spread--;
 	startbck = start;
-	while (*s)
-	{
-		init_start_object(start);
-		if (!(*start))
-			return (NULL);
-		if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
-			(*start)->z = ft_atoi((const char *)s);
-		while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
-			s++;
-		if (*s == ',')
+		while (*s)
 		{
-			(*start)->c = ft_atoi_hex(s);
-			while (*s && (ft_is_hex(*s) || ft_isdigit(*s) || *s == 'x' || *s == ','))
+			init_start_object(start);
+			if (!(*start))
+				return (NULL);
+			if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
+				(*start)->z = ft_atoi((const char *)s);
+			while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
 				s++;
+			if (*s == ',')
+			{
+				(*start)->c = ft_atoi_hex(s);
+				while (*s && (ft_is_hex(*s) || ft_isdigit(*s) || *s == 'x' || *s == ','))
+					s++;
+			}
+			else
+				(*start)->c = -3;
+			while (*s && (!((*s>= 48 && *s <= 57) || *s == '-' || *s == '+')))
+				s++;
+			if (d->x == 0)
+			{
+				d->x = d->xbck;
+				d->y--;
+			}
+			(*start)->x = (((d->xbck - d->x--)) * d->spread);
+			(*start)->y = ((((d->ybck - d->y))) * d->spread);
+			if ((*start)->c == -3 && (*start)->z != 0)
+			{
+				(*start)->c = ((abs(((*start)->z) * 5) + (d->colorz * 35)) & 0xff) << 16;
+				(*start)->c |= ((abs(((*start)->z) * 5) + (d->colorz * 35)) & 0xff) << 8;
+				(*start)->c |= ((abs(((*start)->z) * 5) + (d->colorz * 35)) & 0xff);
+			}
+			else if ((*start)->c == -3)
+				(*start)->c = d->colorz == 1 ? 0xffffff : 0;
+			start++;
 		}
-		else
-			(*start)->c = -3;
-		while (*s && (!((*s>= 48 && *s <= 57) || *s == '-' || *s == '+')))
-			s++;
-		if (d->x == 0)
-		{
-			d->x = d->xbck;
-			d->y--;
-		}
-		(*start)->x = (((d->xbck - d->x--)) * d->spread);
-		(*start)->y = ((((d->ybck - d->y))) * d->spread);
-		if ((*start)->c == -3 && (*start)->z != 0)
-		{
-			(*start)->c = ((abs(((*start)->z) * 5) + 25) & 0xff) << 16;
-			(*start)->c |= ((abs(((*start)->z) * 5) + 25) & 0xff) << 8;
-			(*start)->c |= ((abs(((*start)->z) * 5) + 25) & 0xff);
-		}
-		else if ((*start)->c == -3)
-			(*start)->c = 0xffffff;
-		//ft_printf("pixel n%d x = [%d], y = [%d], z = [%d], c = [%d], linenumber = [%d]\n", tmpcount, (*start)->x, (*start)->y, (*start)->z, (*start)->c, numlines);
-		start++;
-	}
-	/*while (d->x--)
-	{
-		*start = NULL;
-		start++;
-	}*/
-	*start = NULL;
-	ft_putstr("bloop");
 	return (startbck);
 }
 
@@ -141,8 +127,11 @@ int	get_line_and_len(int fd, char **into)
 	*into = NULL;
 	while(get_next_line(fd, &new) > 0)
 	{
+		if (new)
+		{
 		new = ft_strjoin(new, "\n\0");
 		ret += ft_strlen(new);
+		}
 		if (*into)
 			bck = *into;
 		if (!(*into = (char *)malloc(sizeof(char) * ret + 1)))

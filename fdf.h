@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/03 18:39:41 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 14:54:32 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,11 @@ typedef struct	s_init
 	int			wHeight;
 	int			zmax;
 	int			zmin;
+	int			colorz;
 	int			bpp;
 	int			sl;
 	int			pxdst;
+	int			zrate;
 }				t_init;
 
 typedef struct	s_line
