@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 16:37:27 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 16:55:25 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_point	**make_table(char *s, t_init *d)
 			if (!(*start))
 				return (NULL);
 			if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
-				(*start)->z = ft_atoi((const char *)s);
+				(*start)->z = ft_atoi(((const char *)s)) * d->zrate;
 			while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
 				s++;
 			if (*s == ',')
@@ -72,7 +72,7 @@ t_point	**make_table(char *s, t_init *d)
 				(*start)->c |= ((abs(((*start)->z)) + (rand() % 240)) & 0xff);
 			}
 			else if ((*start)->c == -3)
-				(*start)->c = d->colorz == 1 ? 0xffffff : 0;
+				(*start)->c = d->colorz;
 			start++;
 		}
 	return (startbck);

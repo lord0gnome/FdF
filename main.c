@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 16:40:11 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/05 16:57:24 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,15 @@ void	modify_init_with_args(int argc, char **argv, t_init *n)
 		else if (!strncmp(argv[i], "zrate:\0", 6))
 			n->zrate = ft_atoi(argv[i] + 6);
 		else if (!strncmp(argv[i], "colorzero:\0", 10))
-			n->colorz = ft_atoi(argv[i] + 10);
+			n->colorz = ft_atoi_hex(argv[i] + 10);
 		argc--;
 		i++;
 	}
-	n->wWidth = n->wWidth >= 25 && n->wWidth < 1920 ? n->wWidth : 500;
-	n->wHeight = n->wHeight >= 25 && n->wHeight < 1080 ? n->wHeight : 500;
-	n->zrate = n->zrate > 0 && n->zrate <= 9 ? n->zrate : 1;
+	n->wWidth = n->wWidth >= 25 && n->wWidth <= 1920 ? n->wWidth : 500;
+	n->wHeight = n->wHeight >= 25 && n->wHeight <= 1080 ? n->wHeight : 500;
+	n->zrate = n->zrate != 0 && n->zrate <= 9 && n->zrate >= -9 ? n->zrate : 1;
 	n->spread = n->spread >= 1 && n->spread < 1920 ? n->spread : 50;
-	n->colorz = n->colorz == 0 || n->colorz == 1 ? n->colorz : 1;
+	n->colorz = n->colorz >= 0 || n->colorz <= 0xffffff ? n->colorz : 0x888888;
 }
 
 void	init_init(t_init **n)
@@ -110,6 +110,7 @@ void	init_init(t_init **n)
 	(*n)->bpp    = 0;
 	(*n)->sl     = 0;
 	(*n)->pxdst  = 0;
+	(*n)->zrate	 = 1;
 }
 
 int	main(int argc, char **argv)
