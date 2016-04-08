@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/01 10:54:33 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 16:21:31 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 15:13:40 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,43 @@ static t_grade	draw_line_color(t_point *p1, t_point *p2)
 	return (m);
 }
 
-void	init_new(t_line *new, t_point **begin, t_point *end)
+int				do_last_part_of_tlx(t_line *new)
 {
-	new->x1 = (*(begin))->x;
-	new->x2 = ((end))->x;
-	new->y1 = (*(begin))->y;
-	new->y2 = (end)->y;
-	new->dx = abs(new->x2 - new->x1);
-	new->sx = new->x1 < new->x2 ? 1 : -1;
-	new->dy = abs(new->y2 - new->y1);
-	new->sy = new->y1 < new->y2 ? 1 : -1;
-	new->err = (new->dx > new->dy ? new->dx : -new->dy) / 2;
+	if ((new->y1 == new->y2 && new->x1 == new->x2) || !new->x2 || !new->y2)
+		return (0);
+	new->err2 = new->err;
+	if (new->err2 > -new->dx)
+	{
+		new->err -= new->dy;
+		new->x1 += new->sx;
+	}
+	if (new->err2 < new->dy)
+	{
+		new->err += new->dx;
+		new->y1 += new->sy;
+	}
+	return (1);
 }
 
-int		try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
+void			do_part_of_tlx(char *tab, t_init *d, t_grade mt, t_line new)
+{
+	tab[(new.y1 * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 1] = mt.g;
+	tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
+	if (d->thick == 0)
+		return ;
+	tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 1] = mt.g;
+	tab[(((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
+	tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
+	tab[(((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
+	tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
+	tab[(((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
+}
+
+void			try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
 {
 	t_grade	m;
 	t_grade mt;
@@ -51,15 +74,6 @@ int		try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
 	if ((*begin) && end)
 	{
 		init_new(&new, begin, end);
-		/*		new.x1 = (*(begin))->x;
-				new.x2 = ((end))->x;
-				new.y1 = (*(begin))->y;
-				new.y2 = (end)->y;
-				new.dx = abs(new.x2 - new.x1);
-				new.sx = new.x1 < new.x2 ? 1 : -1;
-				new.dy = abs(new.y2 - new.y1);
-				new.sy = new.y1 < new.y2 ? 1 : -1;
-				new.err = (new.dx > new.dy ? new.dx : -new.dy) / 2;*/
 		d->pxdst = new.dx > new.dy ? new.dx : new.dy;
 		m = draw_line_color((*begin), (end));
 		m.count = 0;
@@ -71,43 +85,18 @@ int		try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
 				mt.r = m.r - m.red * m.count / d->pxdst;
 				mt.b = m.b - m.blu * m.count / d->pxdst;
 			}
-			tab[(new.y1 * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
-			tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 1] = mt.g;
-			tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
-			tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
-			tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 1] = mt.g;
-			tab[(((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
-			tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
-			tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
-			tab[(((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
-			tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
-			tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
-			tab[(((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
-			if ((new.y1 == new.y2 && new.x1 == new.x2) || !new.x2 || !new.y2)
-				break;
-			new.err2 = new.err;
-			if (new.err2 > -new.dx)
-			{
-				new.err -= new.dy;
-				new.x1 += new.sx;	
-			}
-			if (new.err2 < new.dy)
-			{
-				new.err += new.dx;
-				new.y1 += new.sy;
-			}
+			do_part_of_tlx(tab, d, mt, new);
+			if (!(do_last_part_of_tlx(&new)))
+				break ;
 			m.count++;
 		}
 	}
-	else
-		return (0);
-	return (1);
 }
-void	draw_pixels(char *tab, t_point **begin, t_init *d)
+
+void			draw_pixels(char *tab, t_point **begin, t_init *d)
 {
 	d->x = 0;
 	d->y = 0;
-	//	ft_printf("xbck%d ybck%d\n", d->xbck, d->ybck);
 	while (d->y < d->ybck)
 	{
 		d->x = 0;
@@ -127,5 +116,3 @@ void	draw_pixels(char *tab, t_point **begin, t_init *d)
 		d->y++;
 	}
 }
-
-

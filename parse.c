@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 16:55:25 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 15:19:45 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 #include "GNL/get_next_line.h"
 #include <stdio.h>
 
-static void	init_start_object(t_point **object)
-{
-	((*object) = (t_point *)malloc(sizeof(t_point)));
-	(*object)->x = 0;
-	(*object)->y = 0;
-	(*object)->z = 0;
-	(*object)->c = 0;
-	(*object)->ldx = 0;
-	(*object)->ldy = 0;
-}
 
 t_point	**make_table(char *s, t_init *d)
 {
@@ -36,52 +26,53 @@ t_point	**make_table(char *s, t_init *d)
 	srand((unsigned) time(&t));
 	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((((d->x) * (d->y) + 1))))))
 		return (NULL);
-	while (((d->spread * d->y) > (d->wHeight / 2)) || ((d->spread * d->x) > ((d->wWidth / 2))))
+	while ((((d->spread + d->zrate) * (d->y)) > (d->wHeight)) || ((d->spread * d->x) > ((d->wWidth))))
 		d->spread--;
+	d->spread = d->x * d->y < 600 ? (d->spread/2) : d->spread - 1;
+	if (!d->spread)
+		d->spread = 1;
 	startbck = start;
-		while (*s)
+	while (*s)
+	{
+		init_start_object(start);
+		if (!(*start))
+			return (NULL);
+		if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
+			(*start)->z = ft_atoi(((const char *)s)) * d->zrate;
+		while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
+			s++;
+		(*start)->c = -3;
+		if (*s == ',')
 		{
-			init_start_object(start);
-			if (!(*start))
-				return (NULL);
-			if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
-				(*start)->z = ft_atoi(((const char *)s)) * d->zrate;
-			while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
+			(*start)->c = ft_atoi_hex(s);
+			while (*s && (ft_is_hex(*s) || ft_isdigit(*s) || *s == 'x' || *s == ','))
 				s++;
-			if (*s == ',')
-			{
-				(*start)->c = ft_atoi_hex(s);
-				while (*s && (ft_is_hex(*s) || ft_isdigit(*s) || *s == 'x' || *s == ','))
-					s++;
-			}
-			else
-				(*start)->c = -3;
-			while (*s && (!((*s>= 48 && *s <= 57) || *s == '-' || *s == '+')))
-				s++;
-			if (d->x == 0)
-			{
-				d->x = d->xbck;
-				d->y--;
-			}
-			(*start)->x = (((d->xbck - d->x--)) * d->spread);
-			(*start)->y = ((((d->ybck - d->y))) * d->spread);
-			if ((*start)->c == -3 && (*start)->z != 0)
-			{
-				(*start)->c = ((abs(((*start)->z)) + (rand() % 240)) & 0xff) << 16;
-				(*start)->c |= ((abs(((*start)->z)) + (rand() % 240)) & 0xff) << 8;
-				(*start)->c |= ((abs(((*start)->z)) + (rand() % 240)) & 0xff);
-			}
-			else if ((*start)->c == -3)
-				(*start)->c = d->colorz;
-			start++;
 		}
+		while (*s && (!((*s>= 48 && *s <= 57) || *s == '-' || *s == '+')))
+			s++;
+		if (d->x == 0)
+		{
+			d->x = d->xbck;
+			d->y--;
+		}
+		(*start)->x = (((d->xbck - d->x--)) * d->spread);
+		(*start)->y = ((((d->ybck - d->y))) * d->spread);
+		if (((*start)->c == -3 && (*start)->z != 0 && d->rand))
+		{
+			(*start)->c = (((abs(((*start)->z)) + rand() % d->rand)) & 0xff) << 16;
+			(*start)->c |= (((rand() % d->rand)) & 0xff) << 8;
+			(*start)->c |= (((rand() % d->rand)) & 0xff);
+		}
+		else if ((*start)->c == -3)
+			(*start)->c = d->colorz;
+		start++;
+	}
+	(*start) = NULL;
 	return (startbck);
 }
 
 int	test_valid(char *points, t_init *n)
 {
-	n->i = 0;
-	n->y = 0;
 	n->xbck = -1;
 	while(points[n->i])
 	{
@@ -114,7 +105,6 @@ int	test_valid(char *points, t_init *n)
 		n->y++;
 	}
 	n->ybck = n->y;
-	n->i = 0;
 	return (1);
 }
 
@@ -132,8 +122,8 @@ int	get_line_and_len(int fd, char **into)
 	{
 		if (new)
 		{
-		new = ft_strjoin(new, "\n\0");
-		ret += ft_strlen(new);
+			new = ft_strjoin(new, "\n\0");
+			ret += ft_strlen(new);
 		}
 		if (*into)
 			bck = *into;

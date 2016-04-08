@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/25 13:51:19 by guiricha          #+#    #+#             */
-/*   Updated: 2016/03/22 15:20:08 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 15:10:09 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int			ft_atoi_hex(const char *str)
 	while (*str != '\0' && ((*str >= '0' && *str <= '9') || ft_is_hex(*str)))
 	{
 		if ((ft_is_hex(*str) == 2))
-		result = result * 16 + (*str - (55));
+			result = result * 16 + (*str - (55));
 		else if ((ft_is_hex(*str) == 1))
-		result = result * 16 + (*str - (87));
+			result = result * 16 + (*str - (87));
 		else if (*str >= '0' && *str <= '9')
-		result = result * 16 + (*str - '0');
+			result = result * 16 + (*str - '0');
 		str++;
 	}
 	return ((int)(result));

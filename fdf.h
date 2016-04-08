@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/05 14:54:32 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 15:20:12 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ typedef struct	s_grade
 
 typedef struct	s_init
 {
+	void		*init;
+	void		*window;
+	void		*image;
+	char		*imagestr;
 	int			i;
 	int			x;
 	int			y;
@@ -46,13 +50,23 @@ typedef struct	s_init
 	int			spread;
 	int			wWidth;
 	int			wHeight;
-	int			zmax;
-	int			zmin;
+	int			var1;
+	int			var2;
 	int			colorz;
 	int			bpp;
 	int			sl;
 	int			pxdst;
 	int			zrate;
+	int			rand;
+	char		thick;
+	void		*mlxinit;
+	void		*mlxwin;
+	void		*mlximg;
+	void		*mlxblk;
+	int			xoffset;
+	int			yoffset;
+	char		*parsed;
+
 }				t_init;
 
 typedef struct	s_line
@@ -79,6 +93,10 @@ typedef struct	s_point
 	int			ldy;
 }				t_point;
 
+void			apply_args(int argc, char **argv, t_init *n);
+void			apply_args_ext(char *current, t_init *n);
+void			init_new(t_line *new, t_point **begin, t_point *end);
+int				init_init(t_init **n);
 void			draw_pixels(char *tab, t_point **begin, t_init *n);
 int				ft_is_hex(char c);
 int				ft_atoi_hex(const char *str);
@@ -87,5 +105,6 @@ t_point			*init_point(int x, int y, int z);
 int				get_line_and_len(int fd, char **into);
 int				test_valid(char *points, t_init *n);
 t_point			**make_table(char *s, t_init *d);
+void			init_start_object(t_point **object);
 
 #endif
