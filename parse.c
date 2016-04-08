@@ -6,14 +6,13 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 15:19:45 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 16:52:04 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "GNL/get_next_line.h"
-#include <stdio.h>
-
+#include <unistd.h>
 
 t_point	**make_table(char *s, t_init *d)
 {
@@ -28,7 +27,7 @@ t_point	**make_table(char *s, t_init *d)
 		return (NULL);
 	while ((((d->spread + d->zrate) * (d->y)) > (d->wHeight)) || ((d->spread * d->x) > ((d->wWidth))))
 		d->spread--;
-	d->spread = d->x * d->y < 600 ? (d->spread/2) : d->spread - 1;
+	d->spread = d->x * d->y < 1200 ? d->spread - (d->spread/4) : d->spread - 2;
 	if (!d->spread)
 		d->spread = 1;
 	startbck = start;
@@ -38,7 +37,7 @@ t_point	**make_table(char *s, t_init *d)
 		if (!(*start))
 			return (NULL);
 		if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
-			(*start)->z = ft_atoi(((const char *)s)) * d->zrate;
+			(*start)->z = (ft_atoi(((const char *)s)) * d->zrate) % 450;
 		while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
 			s++;
 		(*start)->c = -3;
@@ -59,9 +58,9 @@ t_point	**make_table(char *s, t_init *d)
 		(*start)->y = ((((d->ybck - d->y))) * d->spread);
 		if (((*start)->c == -3 && (*start)->z != 0 && d->rand))
 		{
-			(*start)->c = (((abs(((*start)->z)) + rand() % d->rand)) & 0xff) << 16;
-			(*start)->c |= (((rand() % d->rand)) & 0xff) << 8;
-			(*start)->c |= (((rand() % d->rand)) & 0xff);
+			(*start)->c = ((((rand() % d->rand))) & 0xff) << 16;
+			(*start)->c |= ((((rand() % d->rand))) & 0xff) << 8;
+			(*start)->c |= ((((rand() % d->rand))) & 0xff);
 		}
 		else if ((*start)->c == -3)
 			(*start)->c = d->colorz;
@@ -94,7 +93,7 @@ int	test_valid(char *points, t_init *n)
 			while (points[n->i] == ' ')
 				n->i++;
 			if (points[n->i] != '\n' && points[n->i] != '-' && !ft_isdigit(points[n->i]))
-				return (-3);
+				return (-1);
 			if (points[n->i] == '-')
 				n->i++;
 		}
@@ -118,6 +117,8 @@ int	get_line_and_len(int fd, char **into)
 	ret = 0;
 	oldret = ret;
 	*into = NULL;
+	if (((read(fd, NULL, 0)) < 0))
+		return (-1);
 	while(get_next_line(fd, &new) > 0)
 	{
 		if (new)
@@ -134,5 +135,7 @@ int	get_line_and_len(int fd, char **into)
 		ft_strncpy(*into + oldret, new, ret - oldret + 1);
 		oldret = ret;
 	}
+	if (*into == NULL)
+		return (-1);
 	return (ret);
 }

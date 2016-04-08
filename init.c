@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:25:05 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 15:19:42 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 16:46:37 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		init_init(t_init **n)
 	(*n)->y = 0;
 	(*n)->xbck = 0;
 	(*n)->ybck = 0;
-	(*n)->spread = 100;
+	(*n)->spread = 80;
 	(*n)->wWidth = 1920;
 	(*n)->wHeight = 1080;
 	(*n)->var1 = 0;
@@ -44,7 +44,7 @@ int		init_init(t_init **n)
 	(*n)->bpp = 0;
 	(*n)->sl = 0;
 	(*n)->pxdst = 0;
-	(*n)->zrate = 4;
+	(*n)->zrate = 1;
 	(*n)->rand = 0;
 	(*n)->thick = 0;
 	(*n)->xoffset = 0;

@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 11:17:55 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 15:16:47 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/08 16:51:36 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ t_point		**offset(t_point **start, t_init *d)
 		{
 			(*start)->y += abs(d->var2) + 25;
 			(*start)->x += abs(d->var1) + 25;
+			(*start)->x = (*start)->x >= d->wWidth || (*start)->x <= 0 ? d->wWidth - 25 : (*start)->x;
+			(*start)->y = (*start)->y >= d->wHeight || (*start)->y <= 0 ? d->wWidth - 25 : (*start)->y;
 			start++;
 		}
 	}
@@ -75,13 +77,16 @@ int			main(int argc, char **argv)
 	int		endian;
 	t_point	**new;
 	t_init	*n;
+	int		ret;
 
 	if (!(init_init(&n)))
 		return (-1);
 	if (argc < 2 || (fd = open(argv[1], O_RDONLY)) < 0)
-		return (-1);
-	get_line_and_len(fd, &n->parsed);
-	test_valid(n->parsed, n);
+		return (ft_printf("open error or too few arguments.\n"));
+	if ((ret = get_line_and_len(fd, &n->parsed)) < 0)
+		return (ft_printf("read error. code = '%d'\n", ret));
+	if ((ret = test_valid(n->parsed, n)) < 0)
+		return (ft_printf("parse error. code = '%d',\n\n\"%s\"\n\n", ret,  n->parsed));
 	apply_args(argc, argv, n);
 	if (!(new = make_table(n->parsed, n)))
 		return (-1);
