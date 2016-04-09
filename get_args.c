@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:38:34 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 15:14:37 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/09 10:35:54 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	apply_args_ext(char *current, t_init *n)
 		n->thick = ft_atoi_hex(current + 6);
 	else if (!strncmp(current, "pitch:\0", 6))
 		n->pitch = ft_atoi_hex(current + 6);
+	else if (!strncmp(current, "forcecolor:\0", 11))
+		n->force = ft_atoi_hex(current + 11);
 }
 
 void	apply_args(int argc, char **argv, t_init *n)

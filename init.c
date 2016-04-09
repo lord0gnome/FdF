@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:25:05 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 16:46:37 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/09 11:22:27 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		init_init(t_init **n)
 	(*n)->y = 0;
 	(*n)->xbck = 0;
 	(*n)->ybck = 0;
-	(*n)->spread = 80;
+	(*n)->spread = 60;
 	(*n)->wWidth = 1920;
 	(*n)->wHeight = 1080;
 	(*n)->var1 = 0;
@@ -45,21 +45,24 @@ int		init_init(t_init **n)
 	(*n)->sl = 0;
 	(*n)->pxdst = 0;
 	(*n)->zrate = 1;
-	(*n)->rand = 0;
+	(*n)->rand = 0xff;
 	(*n)->thick = 0;
-	(*n)->xoffset = 0;
-	(*n)->yoffset = 0;
+	(*n)->force = -1;
 	return (1);
 }
 
-void	init_start_object(t_point **object)
+int		init_start_object(t_point **object)
 {
 	((*object) = (t_point *)malloc(sizeof(t_point)));
+	if (!(*object))
+		return (0);
 	(*object)->x = 0;
 	(*object)->y = 0;
 	(*object)->z = 0;
 	(*object)->c = 0;
 	(*object)->ldx = 0;
 	(*object)->ldy = 0;
+	(*object)->dnd = 0;
+	return (1);
 }
 

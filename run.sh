@@ -2,6 +2,6 @@ clear
 echo "Running Makefile, cleaning .o's and running map 42.fdf"
 make clean
 make all
-./fdf maps/42_10height.fdf
+./fdf 42.fdf
 exit
 ./fdf ./maps/42.fdf

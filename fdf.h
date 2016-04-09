@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 15:20:12 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/09 11:44:45 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,12 @@ typedef struct	s_init
 	int			sl;
 	int			pxdst;
 	int			zrate;
+	int			zlow;
+	int			zhigh;
 	int			rand;
 	char		thick;
-	void		*mlxinit;
-	void		*mlxwin;
-	void		*mlximg;
-	void		*mlxblk;
-	int			xoffset;
-	int			yoffset;
 	char		*parsed;
+	int			force;
 
 }				t_init;
 
@@ -91,8 +88,10 @@ typedef struct	s_point
 	int			c;
 	int			ldx;
 	int			ldy;
+	char		dnd;
 }				t_point;
 
+int				calc_z(t_point **s, t_init *d);
 void			apply_args(int argc, char **argv, t_init *n);
 void			apply_args_ext(char *current, t_init *n);
 void			init_new(t_line *new, t_point **begin, t_point *end);
@@ -105,6 +104,6 @@ t_point			*init_point(int x, int y, int z);
 int				get_line_and_len(int fd, char **into);
 int				test_valid(char *points, t_init *n);
 t_point			**make_table(char *s, t_init *d);
-void			init_start_object(t_point **object);
+int				init_start_object(t_point **object);
 
 #endif

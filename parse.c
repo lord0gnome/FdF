@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 16:52:04 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/09 15:17:39 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,21 @@ t_point	**make_table(char *s, t_init *d)
 	srand((unsigned) time(&t));
 	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((((d->x) * (d->y) + 1))))))
 		return (NULL);
-	while ((((d->spread + d->zrate) * (d->y)) > (d->wHeight)) || ((d->spread * d->x) > ((d->wWidth))))
+	while ((((d->spread) * (d->y)) > (d->wHeight)) || ((d->spread * d->x) > ((d->wWidth))))
 		d->spread--;
-	d->spread = d->x * d->y < 1200 ? d->spread - (d->spread/4) : d->spread - 2;
 	if (!d->spread)
 		d->spread = 1;
 	startbck = start;
 	while (*s)
 	{
-		init_start_object(start);
+		if (!init_start_object(start))
+			return (NULL);
 		if (!(*start))
 			return (NULL);
+		while (*s == ' ')
+			s++;
 		if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
-			(*start)->z = (ft_atoi(((const char *)s)) * d->zrate) % 450;
+			(*start)->z = (ft_atoi(((const char *)s)));
 		while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
 			s++;
 		(*start)->c = -3;
@@ -56,7 +58,9 @@ t_point	**make_table(char *s, t_init *d)
 		}
 		(*start)->x = (((d->xbck - d->x--)) * d->spread);
 		(*start)->y = ((((d->ybck - d->y))) * d->spread);
-		if (((*start)->c == -3 && (*start)->z != 0 && d->rand))
+		if (d->force != -1)
+			(*start)->c = d->force;
+		else if (((*start)->c == -3 && (*start)->z != 0 && d->rand))
 		{
 			(*start)->c = ((((rand() % d->rand))) & 0xff) << 16;
 			(*start)->c |= ((((rand() % d->rand))) & 0xff) << 8;
@@ -81,7 +85,7 @@ int	test_valid(char *points, t_init *n)
 			if (ft_isdigit(points[n->i]) || points[n->i] == '-')
 			{
 				n->x++;
-				while (ft_isdigit(points[n->i]))
+				while (ft_isdigit(points[n->i]) || points[n->i] == '-')
 					n->i++;
 				if (points[n->i] == ',')
 					if (points[n->i + 1] && points[n->i + 1] == '0')
