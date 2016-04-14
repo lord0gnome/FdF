@@ -6,97 +6,52 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:38 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/09 15:17:39 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/12 13:16:06 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "GNL/get_next_line.h"
 #include <unistd.h>
 
-t_point	**make_table(char *s, t_init *d)
+int		is_mine(char c)
 {
-	t_point **start;
-	t_point	**startbck;
-	time_t	t;
-
-	d->xbck = d->x;
-	d->ybck = d->y;
-	srand((unsigned) time(&t));
-	if (!(start = (t_point **)malloc(sizeof(t_point *) * ((((d->x) * (d->y) + 1))))))
-		return (NULL);
-	while ((((d->spread) * (d->y)) > (d->wHeight)) || ((d->spread * d->x) > ((d->wWidth))))
-		d->spread--;
-	if (!d->spread)
-		d->spread = 1;
-	startbck = start;
-	while (*s)
-	{
-		if (!init_start_object(start))
-			return (NULL);
-		if (!(*start))
-			return (NULL);
-		while (*s == ' ')
-			s++;
-		if ((*s >= 48 && *s <= 57) || (*s == '-' || *s == '+'))
-			(*start)->z = (ft_atoi(((const char *)s)));
-		while (*s && ((*s >= 48 && *s <= 57) || *s == '-' || *s == '+'))
-			s++;
-		(*start)->c = -3;
-		if (*s == ',')
-		{
-			(*start)->c = ft_atoi_hex(s);
-			while (*s && (ft_is_hex(*s) || ft_isdigit(*s) || *s == 'x' || *s == ','))
-				s++;
-		}
-		while (*s && (!((*s>= 48 && *s <= 57) || *s == '-' || *s == '+')))
-			s++;
-		if (d->x == 0)
-		{
-			d->x = d->xbck;
-			d->y--;
-		}
-		(*start)->x = (((d->xbck - d->x--)) * d->spread);
-		(*start)->y = ((((d->ybck - d->y))) * d->spread);
-		if (d->force != -1)
-			(*start)->c = d->force;
-		else if (((*start)->c == -3 && (*start)->z != 0 && d->rand))
-		{
-			(*start)->c = ((((rand() % d->rand))) & 0xff) << 16;
-			(*start)->c |= ((((rand() % d->rand))) & 0xff) << 8;
-			(*start)->c |= ((((rand() % d->rand))) & 0xff);
-		}
-		else if ((*start)->c == -3)
-			(*start)->c = d->colorz;
-		start++;
-	}
-	(*start) = NULL;
-	return (startbck);
+	if (c != ' ' && c != 'x' && !ft_isdigit(c) && !ft_is_hex(c) &&
+		c != '\n' && c != ',' && c != '-' && c != '0')
+		return (0);
+	return (1);
 }
 
-int	test_valid(char *points, t_init *n)
+void	help_test_valid(char *points, t_init *n)
+{
+	if (ft_isdigit(points[n->i]) || points[n->i] == '-')
+	{
+		n->x++;
+		while (ft_isdigit(points[n->i]) || points[n->i] == '-')
+			n->i++;
+		if (points[n->i] == ',')
+			if (points[n->i + 1] && points[n->i + 1] == '0')
+				if (points[n->i + 2] && points[n->i + 2] == 'x')
+					n->i += 3;
+		while (ft_is_hex(points[n->i]) || ft_isdigit(points[n->i]))
+			n->i++;
+	}
+	while (points[n->i] == ' ')
+		n->i++;
+}
+
+int		test_valid(char *points, t_init *n)
 {
 	n->xbck = -1;
-	while(points[n->i])
+	while (points[n->i])
 	{
+		if (!is_mine(points[n->i]))
+			return (-3);
 		n->x = 0;
 		while (points[n->i] != '\n')
 		{
-			if (ft_isdigit(points[n->i]) || points[n->i] == '-')
-			{
-				n->x++;
-				while (ft_isdigit(points[n->i]) || points[n->i] == '-')
-					n->i++;
-				if (points[n->i] == ',')
-					if (points[n->i + 1] && points[n->i + 1] == '0')
-						if (points[n->i + 2] && points[n->i + 2] == 'x')
-							n->i += 3;
-				while (ft_is_hex(points[n->i]) || ft_isdigit(points[n->i]))
-					n->i++;
-			}
-			while (points[n->i] == ' ')
-				n->i++;
-			if (points[n->i] != '\n' && points[n->i] != '-' && !ft_isdigit(points[n->i]))
+			help_test_valid(points, n);
+			if (points[n->i] != '\n' && points[n->i] != '-' &&
+					!ft_isdigit(points[n->i]))
 				return (-1);
 			if (points[n->i] == '-')
 				n->i++;
@@ -111,27 +66,36 @@ int	test_valid(char *points, t_init *n)
 	return (1);
 }
 
-int	get_line_and_len(int fd, char **into)
+char	*help_glal(char *new, int *ret, char **into, char **bck)
 {
-	int	ret;
-	int oldret;
-	char *new;
-	char *bck;
+	if (new)
+	{
+		if (!is_mine(*new))
+			return (NULL);
+		new = ft_strjoin(new, "\n\0");
+		*ret += ft_strlen(new);
+	}
+	if (*into)
+		*bck = *into;
+	return (new);
+}
+
+int		get_line_and_len(int fd, char **into)
+{
+	int		ret;
+	int		oldret;
+	char	*new;
+	char	*bck;
 
 	ret = 0;
 	oldret = ret;
 	*into = NULL;
 	if (((read(fd, NULL, 0)) < 0))
 		return (-1);
-	while(get_next_line(fd, &new) > 0)
+	while (get_next_line(fd, &new) > 0)
 	{
-		if (new)
-		{
-			new = ft_strjoin(new, "\n\0");
-			ret += ft_strlen(new);
-		}
-		if (*into)
-			bck = *into;
+		if (!(new = help_glal(new, &ret, into, &bck)))
+			return (-1);
 		if (!(*into = (char *)malloc(sizeof(char) * ret + 1)))
 			return (0);
 		if (bck)

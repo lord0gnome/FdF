@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/01 10:54:33 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/09 14:11:57 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/12 14:23:30 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,23 +49,20 @@ int				do_last_part_of_tlx(t_line *new)
 
 void			do_part_of_tlx(char *tab, t_init *d, t_grade mt, t_line new)
 {
-	if (new.y1 <= d->wHeight - 3 && new.x1 <= d->wWidth - 3)
-	{
-		tab[(new.y1 * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
-		tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 1] = mt.g;
-		tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
-		if (d->thick == 0)
-			return ;
-		tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
-		tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 1] = mt.g;
-		tab[(((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
-		tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
-		tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
-		tab[(((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
-		tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
-		tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
-		tab[(((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
-	}
+	tab[(new.y1 * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 1] = mt.g;
+	tab[((new.y1 * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
+	if (d->thick == 0)
+		return ;
+	tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8)) + 1] = mt.g;
+	tab[(((new.y1 + 1) * d->sl) + (new.x1 * (d->bpp / 8))) + 0] = mt.b;
+	tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
+	tab[(((new.y1 + 1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
+	tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 2] = mt.r;
+	tab[((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8)) + 1] = mt.g;
+	tab[(((new.y1) * d->sl) + ((new.x1 + 1) * (d->bpp / 8))) + 0] = mt.b;
 	return ;
 }
 
@@ -85,11 +82,12 @@ void			try_line_x(char *tab, t_init *d, t_point **begin, t_point *end)
 		{
 			if (d->pxdst != 0)
 			{
-				mt.g = m.g - m.grn * m.count / d->pxdst; //color to draw = start color - diff between it and end color, multiplied by index and then divided by indexmax.
+				mt.g = m.g - m.grn * m.count / d->pxdst;
 				mt.r = m.r - m.red * m.count / d->pxdst;
 				mt.b = m.b - m.blu * m.count / d->pxdst;
 			}
-			do_part_of_tlx(tab, d, mt, new);
+			if (new.y1 <= d->wheight - 3 && new.x1 <= d->wwidth - 3)
+				do_part_of_tlx(tab, d, mt, new);
 			if (!(do_last_part_of_tlx(&new)))
 				break ;
 			m.count++;

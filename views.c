@@ -1,40 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   calc_z.c                                           :+:      :+:    :+:   */
+/*   views.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/09 11:28:10 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/12 10:58:50 by guiricha         ###   ########.fr       */
+/*   Created: 2016/04/12 14:46:45 by guiricha          #+#    #+#             */
+/*   Updated: 2016/04/12 15:11:08 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int		calc_z(t_point **s, t_init *d)
+t_point		**iso_view(t_point **s, t_init *d)
 {
 	t_point	**bck;
 
 	bck = s;
-	if (*s)
-	{
-		d->zlow = (*s)->z;
-		d->zhigh = (*s)->z;
-		s++;
-	}
 	while (*s)
 	{
-		if ((*s)->z > d->zhigh)
-			d->zhigh = (*s)->z;
-		if ((*s)->z < d->zlow)
-			d->zlow = (*s)->z;
+		d->var1 = (*s)->x;
+		d->var2 = (*s)->y;
+		(*s)->x = d->var1 + d->var2;
+		(*s)->y = (d->var2 - d->var1) / d->pitch;
+		if ((*s)->z != 0)
+			(*s)->y -= (*s)->z;
 		s++;
 	}
-	s = bck;
-	while (abs(((d->zhigh - d->zlow) * d->zrate)) > 255)
-		d->zrate = d->zrate < 0 ? d->zrate + 1 : d->zrate - 1;
-	if (d->zrate == 0)
-		d->zrate = 1;
-	return (1);
+	return (bck);
+}
+
+t_point		**iso_view_left(t_point **s, t_init *d)
+{
+	t_point	**bck;
+
+	bck = s;
+	while (*s)
+	{
+		d->var1 = (*s)->x;
+		d->var2 = (*s)->y;
+		(*s)->x = d->var1 - d->var2;
+		(*s)->y = (d->var2 + d->var1) / d->pitch;
+		if ((*s)->z != 0)
+			(*s)->y -= (*s)->z;
+		s++;
+	}
+	return (bck);
 }

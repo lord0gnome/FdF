@@ -6,12 +6,11 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/25 13:51:19 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/08 15:10:09 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/04/12 11:17:23 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "ft_printf/ft_printf.h"
 
 int			ft_atoi_hex(const char *str)
 {
