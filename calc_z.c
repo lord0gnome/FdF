@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/09 11:28:10 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/12 10:58:50 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/09/08 17:27:37 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int		calc_z(t_point **s, t_init *d)
 		s++;
 	}
 	s = bck;
-	while (abs(((d->zhigh - d->zlow) * d->zrate)) > 255)
-		d->zrate = d->zrate < 0 ? d->zrate + 1 : d->zrate - 1;
-	if (d->zrate == 0)
-		d->zrate = 1;
+/*	while (abs(((d->zhigh - d->zlow) * d->zrate)) > 255)
+		d->zrate = d->zrate < 0 ? d->zrate + 1 : d->zrate - 1;*/
 	return (1);
 }

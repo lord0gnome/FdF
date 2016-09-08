@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:38:34 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/12 15:14:52 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/09/08 18:16:12 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	apply_args(int argc, char **argv, t_init *n)
 	n->pitch = n->pitch <= 6 && n->pitch > 1 ? n->pitch + 1 : 2;
 	n->wwidth = n->wwidth >= 25 && n->wwidth <= 1920 ? n->wwidth : 500;
 	n->wheight = n->wheight >= 25 && n->wheight <= 1080 ? n->wheight : 500;
-	n->zrate = n->zrate != 0 && n->zrate <= 9 && n->zrate >= -9 ? n->zrate : 1;
+//	n->zrate = n->zrate != 0 && n->zrate <= 9 && n->zrate >= -9 ? n->zrate : 1;
 	n->spread = n->spread >= 1 && n->spread < 1920 ? n->spread : 50;
 	n->colorz = n->colorz >= 0 || n->colorz <= 0xffffff ? n->colorz : 0x888888;
 }

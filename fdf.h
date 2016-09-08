@@ -6,7 +6,7 @@
 /*   By: guiricha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/17 13:14:51 by guiricha          #+#    #+#             */
-/*   Updated: 2016/04/12 15:03:58 by guiricha         ###   ########.fr       */
+/*   Updated: 2016/09/08 18:01:38 by guiricha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,30 @@ typedef struct		s_grade
 
 }					t_grade;
 
+typedef struct		s_point
+{
+	int				x;
+	int				y;
+	int				z;
+	int				c;
+	int				ldx;
+	int				ldy;
+	char			dnd;
+}					t_point;
+
 typedef struct		s_init
 {
 	void			*init;
 	void			*window;
 	void			*image;
 	char			*imagestr;
+	char			toggle;
 	int				i;
 	int				x;
 	int				y;
 	int				xbck;
 	int				ybck;
-	int				pitch;
+	float			pitch;
 	int				spread;
 	int				wwidth;
 	int				wheight;
@@ -54,7 +66,7 @@ typedef struct		s_init
 	int				bpp;
 	int				sl;
 	int				pxdst;
-	int				zrate;
+	float				zrate;
 	int				zlow;
 	int				zhigh;
 	int				rand;
@@ -62,6 +74,7 @@ typedef struct		s_init
 	char			*parsed;
 	int				force;
 	int				left;
+	t_point			**npoint;
 
 }					t_init;
 
@@ -79,17 +92,8 @@ typedef struct		s_line
 	int				err2;
 }					t_line;
 
-typedef struct		s_point
-{
-	int				x;
-	int				y;
-	int				z;
-	int				c;
-	int				ldx;
-	int				ldy;
-	char			dnd;
-}					t_point;
 
+t_point				**offset(t_point **s, t_init *d);
 int					calc_z(t_point **s, t_init *d);
 void				apply_args(int argc, char **argv, t_init *n);
 void				apply_args_ext(char *current, t_init *n);
@@ -106,6 +110,6 @@ int					get_line_and_len(int fd, char **into);
 int					test_valid(char *points, t_init *n);
 t_point				**make_table(char *s, t_init *d);
 int					init_start_object(t_point **object);
-int					my_key_func(int keycode, void *param);
+int					better_key_func(int keycode, t_init *param);
 
 #endif
